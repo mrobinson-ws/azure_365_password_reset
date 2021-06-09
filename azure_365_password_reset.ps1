@@ -26,7 +26,7 @@ if ($null -eq $usernames) { Throw }
 ##### Start User(s) Loop #####
 foreach ($username in $usernames) {
     $PasswordEntry = New-Object System.Windows.Forms.Form
-    $PasswordEntry.Text = 'Please Enter A Password for $username'
+    $PasswordEntry.Text = "Password Entry"
     $PasswordEntry.Size = New-Object System.Drawing.Size(300,200)
     $PasswordEntry.StartPosition = 'CenterScreen'
 
@@ -48,12 +48,12 @@ foreach ($username in $usernames) {
 
     $label = New-Object System.Windows.Forms.Label
     $label.Location = New-Object System.Drawing.Point(10,20)
-    $label.Size = New-Object System.Drawing.Size(280,20)
-    $label.Text = 'Please enter the information in the space below:'
+    $label.Size = New-Object System.Drawing.Size(280,30)
+    $label.Text = "Please enter the new password for $username below"
     $PasswordEntry.Controls.Add($label)
 
     $textBox = New-Object System.Windows.Forms.TextBox
-    $textBox.Location = New-Object System.Drawing.Point(10,40)
+    $textBox.Location = New-Object System.Drawing.Point(10,60)
     $textBox.Size = New-Object System.Drawing.Size(260,20)
     $PasswordEntry.Controls.Add($textBox)
 
@@ -67,7 +67,7 @@ foreach ($username in $usernames) {
         $password = $textBox.Text
         $securepassword = ConvertTo-SecureString -String $password -AsPlainText -Force
     }
+    else { Throw }
     $UserInfo = $allusers[$username]
     Set-AzureADUserPassword -ObjectID $UserInfo.ObjectID -Password $securepassword -ForceChangePasswordNextLogin $false
 }
-

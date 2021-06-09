@@ -1,1 +1,1 @@
-This script is a simple user password reset with GUI elements.
+This script is designed to allow you to reset 1 or more user's passwords on Azure/M365.
