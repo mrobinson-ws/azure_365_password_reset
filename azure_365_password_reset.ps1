@@ -62,12 +62,9 @@ foreach ($username in $usernames) {
     $PasswordEntry.Add_Shown({$textBox.Select()})
     $result = $PasswordEntry.ShowDialog()
 
-    if ($result -eq [System.Windows.Forms.DialogResult]::OK)
-    {
-        $password = $textBox.Text
-        $securepassword = ConvertTo-SecureString -String $password -AsPlainText -Force
-    }
+    if ($result -eq [System.Windows.Forms.DialogResult]::OK) { $securepassword = ConvertTo-SecureString -String $textBox.Text -AsPlainText -Force }
     else { Throw }
+    
     $UserInfo = $allusers[$username]
     Set-AzureADUserPassword -ObjectID $UserInfo.ObjectID -Password $securepassword -ForceChangePasswordNextLogin $false
 }
