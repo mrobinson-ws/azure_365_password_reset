@@ -28,6 +28,7 @@ foreach ($username in $usernames) {
     $PasswordEntry = New-Object System.Windows.Forms.Form
     $PasswordEntry.Text = "Password Entry"
     $PasswordEntry.Size = New-Object System.Drawing.Size(300,200)
+    $PasswordEntry.Topmost = $true
     $PasswordEntry.StartPosition = 'CenterScreen'
 
     $okButton = New-Object System.Windows.Forms.Button
@@ -57,7 +58,12 @@ foreach ($username in $usernames) {
     $textBox.Size = New-Object System.Drawing.Size(260,20)
     $PasswordEntry.Controls.Add($textBox)
 
-    $PasswordEntry.Topmost = $true
+    $PasswordResetCheckbox = new-object System.Windows.Forms.checkbox
+    $PasswordResetCheckbox.Location = new-object System.Drawing.Size(10,75)
+    $PasswordResetCheckbox.Size = new-object System.Drawing.Size(250,50)
+    $PasswordResetCheckbox.Text = "Force Password Reset On Login"
+    $PasswordResetCheckbox.Checked = $false
+    $PasswordEntry.Controls.Add($PasswordResetCheckbox) 
 
     $PasswordEntry.Add_Shown({$textBox.Select()})
     $result = $PasswordEntry.ShowDialog()
@@ -66,5 +72,10 @@ foreach ($username in $usernames) {
     else { Throw }
     
     $UserInfo = $allusers[$username]
-    Set-AzureADUserPassword -ObjectID $UserInfo.ObjectID -Password $securepassword -ForceChangePasswordNextLogin $false
+    if($PasswordResetCheckbox.Checked -eq $true){
+        Set-AzureADUserPassword -ObjectID $UserInfo.ObjectID -Password $securepassword -ForceChangePasswordNextLogin $true
+    }
+    else{
+        Set-AzureADUserPassword -ObjectID $UserInfo.ObjectID -Password $securepassword -ForceChangePasswordNextLogin $false
+    }
 }
